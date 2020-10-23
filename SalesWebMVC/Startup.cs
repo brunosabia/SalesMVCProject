@@ -41,6 +41,7 @@ namespace SalesWebMVC
                    options.UseMySql(Configuration.GetConnectionString("SalesWebMVCContext"), builder =>
                    builder.MigrationsAssembly("SalesWebMVC")));
 
+            services.AddScoped<DepartmentService>();
             services.AddScoped<SeedingService>();
             services.AddScoped<SellerService>();
         }
