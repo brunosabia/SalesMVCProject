@@ -39,6 +39,13 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+            //realiza a validação a nivel de servidor, apenas caso o Javascript do usuário esteja desativado 
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
             _sellerService.Insert(seller);
             //return RedirectToAction("Index"); da no mesmo
             return RedirectToAction(nameof(Index));
@@ -85,6 +92,7 @@ namespace SalesWebMVC.Controllers
 
         public IActionResult Edit(int? id)
         {
+
             if(id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
@@ -105,7 +113,14 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id,Seller seller)
         {
-            if(id != seller.Id)
+            //realiza a validação a nivel de servidor, apenas caso o Javascript do usuário esteja desativado 
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+            if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
